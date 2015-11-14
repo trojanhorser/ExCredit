@@ -1,8 +1,10 @@
 package com.app.project.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.app.project.myapplication.core.camera.CameraEngine;
 import com.app.project.myapplication.core.extraviews.FocusBoxView;
@@ -126,13 +129,29 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback, Vi
 
         Log.d(TAG, "Initialization of TessBaseApi");
 
-        new TessAsyncEngine().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, this, bmp);
+        TessAsyncEngine tessAsyncEngine = new TessAsyncEngine();
 
+        tessAsyncEngine.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, this, bmp);
+
+        addCredit(tessAsyncEngine.getParsedValue());
     }
 
     @Override
     public void onShutter() {
 
     }
+
+
+    private void addCredit(String credit) {
+        Intent in=new Intent(Intent.ACTION_CALL,Uri.parse("tel:*121*" + credit));
+        try{
+            startActivity(in);
+        }
+
+        catch (android.content.ActivityNotFoundException ex){
+            Toast.makeText(getApplicationContext(), "yourActivity is not founded", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

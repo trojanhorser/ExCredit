@@ -1,7 +1,9 @@
 package com.app.project.myapplication.core.tesstool;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -20,6 +22,8 @@ public class TessAsyncEngine extends AsyncTask<Object, Void, String> {
     private Bitmap bmp;
 
     private Activity context;
+
+    private String parsedValue;
 
 
     @Override
@@ -64,7 +68,10 @@ public class TessAsyncEngine extends AsyncTask<Object, Void, String> {
 
             String result = tessEngine.detectText(bmp);
 
+            parsedValue = result;
+
             Log.d(TAG, result);
+
 
             return result;
 
@@ -87,5 +94,9 @@ public class TessAsyncEngine extends AsyncTask<Object, Void, String> {
                 .show(context.getFragmentManager(), TAG);
 
         super.onPostExecute(s);
+    }
+
+    public String getParsedValue(){
+        return parsedValue;
     }
 }
